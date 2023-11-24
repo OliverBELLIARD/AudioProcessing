@@ -1,9 +1,6 @@
 package audio;
 
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Mixer;
-import javax.sound.sampled.SourceDataLine;
-import javax.sound.sampled.TargetDataLine;
+import javax.sound.sampled.*;
 import java.util.Arrays;
 
 /** A collection of static utilities related to the audio system. */
@@ -33,7 +30,7 @@ public class AudioIO {
      * @see AudioSystem.getMixerInfo() which provides a list of all mixers on your system.
      */
     public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){
-
+        return AudioSystem.getTargetDataLine(AudioSystem.getClip().getFormat(), getMixerInfo(mixerName));
     }
 
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
