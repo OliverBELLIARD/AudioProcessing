@@ -15,7 +15,7 @@ public class AudioProcessor implements Runnable {
     /** Creates an AudioProcessor that takes input from the given TargetDataLine, and plays back
      * to the given SourceDataLine.
      * @param frameSize the size of the audio buffer. The shorter, the lower the latency. */
-            public AudioProcessor(TargetDataLine audioInput, SourceDataLine audioOutput, FrameSize frameSize) {
+            public AudioProcessor(TargetDataLine audioInput, SourceDataLine audioOutput, int frameSize) {
 
             }
 

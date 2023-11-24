@@ -10,6 +10,7 @@ public class AudioSignal {
 
     private double[] sampleBuffer; // floating point representation of audio samples
     private double dBlevel; // current signal level
+    private int frameSize;
 
     public static void main(String[] args) {
 
@@ -17,8 +18,8 @@ public class AudioSignal {
 
     /** Construct an AudioSignal that may contain up to "frameSize" samples.
      * @param frameSize the number of samples in one audio frame */
-    public AudioSignal(FrameSize frameSize) {
-
+    public AudioSignal(int frameSize) {
+        this.frameSize = frameSize;
     }
 
     /** Sets the content of this signal from another signal.
@@ -48,6 +49,7 @@ public class AudioSignal {
         return true;
     }
 
+    // Getters & Setters
     public double[] getSampleBuffer() {
         return sampleBuffer;
     }
@@ -64,10 +66,18 @@ public class AudioSignal {
         this.dBlevel = dBlevel;
     }
 
-    // your job: add getters and setters ...
-    // double getSample(int i)
-    // void setSample(int i, double value)
-    // double getdBLevel()
-    // int getFrameSize()
-    // Can be implemented much later: Complex[] computeFFT()
+    public double getSample(int i) {
+        return sampleBuffer[i];
+    }
+
+    public void setSample(int i, double value) {
+        sampleBuffer[i] = value;
+    }
+
+    // [x] your job: add getters and setters ...
+    // [x] double getSample(int i)
+    // [x] void setSample(int i, double value)
+    // [x] double getdBLevel()
+    // [x] int getFrameSize()
+    // [ ] Can be implemented much later: Complex[] computeFFT()
 }
