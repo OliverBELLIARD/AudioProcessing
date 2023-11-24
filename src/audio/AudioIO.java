@@ -32,10 +32,14 @@ public class AudioIO {
      * @param mixerName a string that matches one of the available mixers.
      * @see AudioSystem.getMixerInfo() which provides a list of all mixers on your system.
      */
-    public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){}
+    public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){
+
+    }
 
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
-    public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){}
+    public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){
+
+    }
 
     public static void main(String[] args){
 
