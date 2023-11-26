@@ -54,7 +54,26 @@ public class AudioIO {
 
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
     public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){
-        return AudioSystem.ou
+        int channels = 2;
+        double duration = 1.0;
+        int sampleBytes = Short.SIZE / 8;
+        int frameBytes = sampleBytes * channels;
+        AudioFormat format = new AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED,
+                sampleRate,
+                Short.SIZE,
+                channels,
+                frameBytes,
+                sampleRate,
+                true);
+
+        try {
+            return AudioSystem.getSourceDataLine(format, getMixerInfo(mixerName));
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     public static void main(String[] args){
