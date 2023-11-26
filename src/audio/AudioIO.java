@@ -31,7 +31,6 @@ public class AudioIO {
      */
     public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){
         int channels = 2;
-        double duration = 1.0;
         int sampleBytes = Short.SIZE / 8;
         int frameBytes = sampleBytes * channels;
         AudioFormat format = new AudioFormat(
@@ -55,7 +54,6 @@ public class AudioIO {
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
     public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){
         int channels = 2;
-        double duration = 1.0;
         int sampleBytes = Short.SIZE / 8;
         int frameBytes = sampleBytes * channels;
         AudioFormat format = new AudioFormat(
