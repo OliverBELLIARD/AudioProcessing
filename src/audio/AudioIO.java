@@ -30,12 +30,31 @@ public class AudioIO {
      * @see AudioSystem.getMixerInfo() which provides a list of all mixers on your system.
      */
     public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){
-        return AudioSystem.getTargetDataLine(AudioSystem.getClip().getFormat(), getMixerInfo(mixerName));
+        int channels = 2;
+        double duration = 1.0;
+        int sampleBytes = Short.SIZE / 8;
+        int frameBytes = sampleBytes * channels;
+        AudioFormat format = new AudioFormat(
+                AudioFormat.Encoding.PCM_SIGNED,
+                sampleRate,
+                Short.SIZE,
+                channels,
+                frameBytes,
+                sampleRate,
+                true);
+
+        try {
+            return AudioSystem.getTargetDataLine(format, getMixerInfo(mixerName));
+        }
+        catch (Exception e) {
+            System.out.println(e);
+            return null;
+        }
     }
 
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
     public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){
-
+        return AudioSystem.ou
     }
 
     public static void main(String[] args){
