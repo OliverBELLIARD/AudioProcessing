@@ -6,7 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="f9122d7d-401e-480c-a4dd-264231510a04" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/audio/AudioSignal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioSignal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioIO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioProcessor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioProcessor.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

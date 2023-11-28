@@ -29,7 +29,7 @@ public class AudioIO {
      * @param mixerName a string that matches one of the available mixers.
      * @see AudioSystem.getMixerInfo() which provides a list of all mixers on your system.
      */
-    public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate){
+    public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate) {
         int channels = 2;
         int sampleBytes = Short.SIZE / 8;
         int frameBytes = sampleBytes * channels;
@@ -43,16 +43,19 @@ public class AudioIO {
                 true);
 
         try {
-            return AudioSystem.getTargetDataLine(format, getMixerInfo(mixerName));
-        }
-        catch (Exception e) {
-            System.out.println(e);
+            DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
+            Mixer mixer = AudioSystem.getMixer(getMixerInfo(mixerName));
+            TargetDataLine line = (TargetDataLine) mixer.getLine(info);
+            line.open(format);
+            return line;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
     /** Return a line that's appropriate for playing sound to a loudspeaker. */
-    public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate){
+    public static SourceDataLine obtainAudioOutput(String mixerName, int sampleRate) {
         int channels = 2;
         int sampleBytes = Short.SIZE / 8;
         int frameBytes = sampleBytes * channels;
@@ -66,15 +69,35 @@ public class AudioIO {
                 true);
 
         try {
-            return AudioSystem.getSourceDataLine(format, getMixerInfo(mixerName));
-        }
-        catch (Exception e) {
-            System.out.println(e);
+            DataLine.Info info = new DataLine.Info(SourceDataLine.class, format);
+            Mixer mixer = AudioSystem.getMixer(getMixerInfo(mixerName));
+            SourceDataLine line = (SourceDataLine) mixer.getLine(info);
+            line.open(format);
+            return line;
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
     }
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
+        // Print available audio mixers
+        printAudioMixers();
 
+        // Obtain audio input line (replace "YourMicMixerName" with the actual mixer name)
+        TargetDataLine audioInputLine = obtainAudioInput("YourMicMixerName", 44100);
+
+        if (audioInputLine != null) {
+            // Use the obtained audio input line for recording
+            // (You can test AudioSignal's recordFrom method with this line)
+        }
+
+        // Obtain audio output line (replace "YourSpeakerMixerName" with the actual mixer name)
+        SourceDataLine audioOutputLine = obtainAudioOutput("YourSpeakerMixerName", 44100);
+
+        if (audioOutputLine != null) {
+            // Use the obtained audio output line for playback
+            // (You can test AudioSignal's playTo method with this line)
+        }
     }
 }
