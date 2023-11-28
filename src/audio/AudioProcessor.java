@@ -87,9 +87,7 @@ public class AudioProcessor implements Runnable {
         return isThreadRunning;
     }
 
-    public void setThreadRunning(boolean threadRunning) {
-        isThreadRunning = threadRunning;
-    }
+    // No setter for (bool) isThreadRunning since it should be set and reset by thread management methods only
 
     /* an example of a possible test code */
     public static void main(String[] args) {
