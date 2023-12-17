@@ -1,7 +1,9 @@
 package audio;
 
 import javax.sound.sampled.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /** A collection of static utilities related to the audio system. */
 public class AudioIO {
@@ -80,6 +82,43 @@ public class AudioIO {
         }
     }
 
+    /** Returns a list of available audio input devices.
+     * @return List<String> list of available audio input devices.
+     */
+    public static List<String> getAvailableInputDevices() {
+        Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
+        List<String> inputDevices = new ArrayList<>();
+
+        for (Mixer.Info info : mixerInfos) {
+            Mixer mixer = AudioSystem.getMixer(info);
+            if (mixer.getTargetLineInfo().length > 0) {
+                inputDevices.add(info.getName());
+            }
+        }
+
+        return inputDevices;
+    }
+
+    /** Returns a list of available audio output devices.
+     * @return List<String> list of available audio output devices.
+     */
+    public static List<String> getAvailableOutputDevices() {
+        Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
+        List<String> outputDevices = new ArrayList<>();
+
+        for (Mixer.Info info : mixerInfos) {
+            Mixer mixer = AudioSystem.getMixer(info);
+            if (mixer.getSourceLineInfo().length > 0) {
+                outputDevices.add(info.getName());
+            }
+        }
+
+        return outputDevices;
+    }
+
+    /** Test client for all class methods.
+     * @param args
+     */
     public static void main(String[] args) {
         // Print available audio mixers
         printAudioMixers();
@@ -99,5 +138,14 @@ public class AudioIO {
             // Use the obtained audio output line for playback
             // (You can test AudioSignal's playTo method with this line)
         }
+
+        // Obtain and print available audio input devices
+        List<String> inputDevices = getAvailableInputDevices();
+        System.out.println("Available Input Devices: " + inputDevices);
+
+        // Obtain and print available audio output devices
+        List<String> outputDevices = getAvailableOutputDevices();
+        System.out.println("Available Output Devices: " + outputDevices);
+
     }
 }

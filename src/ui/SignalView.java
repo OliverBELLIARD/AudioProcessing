@@ -2,7 +2,7 @@ package ui;
 
 import javafx.scene.chart.LineChart;
 
-public class SignalView extends LineChart<Number,Number> {
+//public class SignalView extends LineChart<Number,Number> {
     // SignalView class extends LineChart<Number,Number> and can display an AudioSignal
 
     /*
@@ -14,5 +14,5 @@ public class SignalView extends LineChart<Number,Number> {
     /**
      * Called periodically from a javafx.animation.AnimationTimer
      */
-    public updateData() {}
-}
+    //public updateData() {}
+//}

@@ -8,12 +8,17 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import audio.AudioIOHandler;
 
 public class Main extends Application {
+
+    private AudioIOHandler audioIOHandler;
 
     /* Terminal command to run in application configuration (Current Application>Edit Configuration):
     >>> cd src
     >>> --module-path C:\Users\olire\Documents\Java\javafx-libs\javafx-sdk-21.0.1\lib --add-modules ALL-MODULE-PATH
+
+    Note: You must adapt the path of the library to your local library to run this Application.
 
     Old (runner project):
     --module-path "C:\Users\olire\Documents\Java\javafx-libs\javafx-sdk-21.0.1\lib" --add-modules javafx.controls
@@ -21,36 +26,88 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
+            // Create ComboBoxes for audio input and output devices
+            ComboBox<String> audioInputComboBox = new ComboBox<>();
+            ComboBox<String> audioOutputComboBox = new ComboBox<>();
+
+            // Initialize AudioIOHandler with ComboBoxes
+            audioIOHandler = new AudioIOHandler(audioInputComboBox, audioOutputComboBox);
+
+            // Set up the main window elements (root)
             BorderPane root = new BorderPane();
             root.setTop(createToolbar());
             root.setBottom(createStatusbar());
             root.setCenter(createMainContent());
+
+            // Set up the layout
             Scene scene = new Scene(root,1500,800);
+
+            // Set up the stage
             primaryStage.setScene(scene);
             primaryStage.setTitle("The JavaFX audio processor");
             primaryStage.show();
-            } catch(Exception e) {e.printStackTrace();}
+
+            // Populate audio input and output devices asynchronously
+            audioIOHandler.populateAudioInputDevices();
+            audioIOHandler.populateAudioOutputDevices();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private Node createToolbar(){
-    Button button = new Button("appuyez !");
-    ToolBar tb = new ToolBar(button, new Label("ceci est un label"), new Separator());
-    button.setOnAction(event -> System.out.println("appui!"));
-    ComboBox<String> cb = new ComboBox<>();
-    cb.getItems().addAll("Item 1", "Item 2", "Item 3");
-    tb.getItems().add(cb);
-    return tb;
+    /**
+     * @brief Returns a populated toolbar.
+     * @return Node populated toolbar
+     */
+    private Node createToolbar() {
+        Button startButton = new Button("Start");
+        Button stopButton = new Button("Stop");
+
+        ToolBar toolbar = new ToolBar(startButton, stopButton, new Separator());
+
+        toolbar.getItems().addAll(
+                new Label("Input device:"), audioIOHandler.getAudioInputComboBox(),
+                new Separator(),
+                new Label("Output device:"), audioIOHandler.getAudioOutputComboBox());
+
+        startButton.setOnAction(event -> startAudioProcessing());
+        stopButton.setOnAction(event -> stopAudioProcessing());
+
+        return toolbar;
     }
 
-    private Node createStatusbar(){
-    HBox statusbar = new HBox();
-    statusbar.getChildren().addAll(new Label("Name:"), new TextField(" "));
-    return statusbar;
+    /**
+     * @brief Returns a populated status bar.
+     * @return Node populated status bar
+     */
+    private Node createStatusbar() {
+        HBox statusbar = new HBox();
+        TextField statusTextField = new TextField(" ");
+        statusbar.getChildren().addAll(new Label("Status:"), statusTextField);
+        return statusbar;
     }
 
-    private Node createMainContent(){
-    Group g = new Group();
-    // ici en utilisant g.getChildren().add(...) vous pouvez ajouter tout ´el´ement graphique souhait´e de type Node
-    return g;
+    /**
+     * @brief Starts the audio processing.
+     */
+    private void startAudioProcessing() {
+        audioIOHandler.startAudioProcessing();
+        System.out.println("Audio processing started.");
+    }
+
+    /**
+     * @brief Stops the audio processing.
+     */
+    private void stopAudioProcessing() {
+        // Stop audio processing using AudioIOHandler (add relevant method in AudioIOHandler)
+        // audioIOHandler.stopAudioProcessing();
+        System.out.println("Audio processing stopped.");
+    }
+
+    private Node createMainContent() {
+        Group g = new Group();
+        // Using g.getChildren().add(...) is easy to add graphic elements of type Node
+        return g;
     }
 }
