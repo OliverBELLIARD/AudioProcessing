@@ -68,6 +68,11 @@ public class AudioIOHandler {
         // (You can call the relevant methods from the AudioIO class)
     }
 
+    public AudioSignal getAudioSignal() {
+        // Assuming AudioIO has a method to get the current audio signal
+        return AudioIO.getCurrentAudioSignal();
+    }
+
     public ComboBox<String> getAudioInputComboBox() {
         return audioInputComboBox;
     }

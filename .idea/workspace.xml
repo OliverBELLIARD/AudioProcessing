@@ -5,11 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="f9122d7d-401e-480c-a4dd-264231510a04" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/audio/AudioIOHandler.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/audio/AudioIO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioIO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioIOHandler.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioIOHandler.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/audio/AudioSignal.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/audio/AudioSignal.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ui/SignalView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/SignalView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/Spectrogram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/Spectrogram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ui/VuMeter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/ui/VuMeter.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,17 +38,18 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/olire/Documents/Java/javafx-libs/javafx-sdk-21.0.1/lib&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.41379312&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "last_opened_file_path": "C:/Users/olire/Documents/Java/javafx-libs/javafx-sdk-21.0.1/lib",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.41379312",
+    "settings.editor.selected.configurable": "preferences.keymap"
   }
-}</component>
+}]]></component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ui.Main" />

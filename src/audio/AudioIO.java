@@ -7,6 +7,8 @@ import java.util.List;
 
 /** A collection of static utilities related to the audio system. */
 public class AudioIO {
+    private static TargetDataLine audioInputLine;  // Add this line to store the audio input line
+    private static SourceDataLine audioOutputLine; // Add this line to store the audio output line
 
     /** Displays every audio mixer available on the current system. */
     public static void printAudioMixers() {
@@ -114,6 +116,81 @@ public class AudioIO {
         }
 
         return outputDevices;
+    }
+
+    /** Returns the current audio signal. */
+    public static AudioSignal getCurrentAudioSignal() {
+        AudioSignal audioSignal = new AudioSignal(1024);
+        audioSignal.recordFrom(audioInputLine); // Assuming audioInputLine is a class variable in AudioIO
+        return audioSignal;
+    }
+
+    /** Start audio processing using the specified input and output devices. */
+    public static void startAudioProcessing(String inputDevice, String outputDevice) {
+        // Placeholder implementation; replace with actual logic
+        System.out.println("Audio processing started with input: " + inputDevice + ", output: " + outputDevice);
+        // Example: Start recording and playing audio
+        startRecording(inputDevice, 44100);
+        startPlayback(outputDevice, 44100);
+    }
+
+    /** Stops audio processing. */
+    public static void stopAudioProcessing() {
+        // Placeholder implementation; replace with actual logic
+        System.out.println("Audio processing stopped.");
+        // Example: Stop recording and playing audio
+        stopRecording();
+        stopPlayback();
+    }
+
+    /** Starts recording audio. */
+    private static void startRecording(String inputDevice, int sampleRate) {
+        audioInputLine = obtainAudioInput(inputDevice, sampleRate);
+        if (audioInputLine != null) {
+            audioInputLine.start();
+            // Placeholder: Add logic to handle the recorded audio data
+        }
+    }
+
+    /** Stops recording audio. */
+    private static void stopRecording() {
+        if (audioInputLine != null) {
+            audioInputLine.stop();
+            audioInputLine.close();
+        }
+    }
+
+    /** Starts playing back audio. */
+    private static void startPlayback(String outputDevice, int sampleRate) {
+        audioOutputLine = obtainAudioOutput(outputDevice, sampleRate);
+        if (audioOutputLine != null) {
+            audioOutputLine.start();
+            // Placeholder: Add logic to provide audio data for playback
+        }
+    }
+
+    /** Stops playing back audio. */
+    private static void stopPlayback() {
+        if (audioOutputLine != null) {
+            audioOutputLine.stop();
+            audioOutputLine.close();
+        }
+    }
+
+    public static TargetDataLine getAudioInputLine() {
+        return audioInputLine;
+    }
+
+    public static void setAudioInputLine(TargetDataLine audioInputLine) {
+        AudioIO.audioInputLine = audioInputLine;
+    }
+
+    public static SourceDataLine getAudioOutputLine() {
+        return audioOutputLine;
+    }
+
+    public static void setAudioOutputLine(SourceDataLine audioOutputLine) {
+        AudioIO.audioOutputLine = audioOutputLine;
     }
 
     /** Test client for all class methods.

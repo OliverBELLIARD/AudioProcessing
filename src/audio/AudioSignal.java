@@ -1,5 +1,8 @@
 package audio;
 
+import math.Complex;
+import math.FFT;
+
 import javax.sound.sampled.*;
 import java.io.ByteArrayInputStream;
 import java.util.Arrays;
@@ -7,7 +10,6 @@ import java.util.Arrays;
 /** A container for an audio signal backed by a double buffer so as to allow floating point calculation
  * for signal processing and avoid saturation effects. Samples are 16 bit wide in this implementation. */
 public class AudioSignal {
-
     private double[] sampleBuffer; // floating point representation of audio samples
     private double dBlevel; // current signal level
     private int frameSize;
@@ -25,13 +27,21 @@ public class AudioSignal {
         otherSignal.setSampleBuffer(new double[frameSize]); // Initialize with sample data
         audioSignal.setFrom(otherSignal);
 
-        // Test recordFrom method with a mock TargetDataLine (not implemented in this example)
-        // TargetDataLine audioInput = createMockTargetDataLine();
-        // audioSignal.recordFrom(audioInput);
+        // Populate sampleBuffer with some data (replace this with actual data)
+        double[] testData = new double[frameSize];
+        for (int i = 0; i < frameSize; i++) {
+            testData[i] = Math.sin(2 * Math.PI * i / frameSize);
+        }
+        audioSignal.setSampleBuffer(testData);
 
-        // Test playTo method with a mock SourceDataLine (not implemented in this example)
-        // SourceDataLine audioOutput = createMockSourceDataLine();
-        // audioSignal.playTo(audioOutput);
+        // Compute FFT
+        Complex[] fftResult = audioSignal.computeFFT();
+
+        // Test FFT by displaying the FFT result
+        System.out.println("FFT Result:");
+        for (Complex c : fftResult) {
+            System.out.println(c);
+        }
     }
 
 
@@ -60,7 +70,6 @@ public class AudioSignal {
             sampleBuffer[i] = ((byteBuffer[2*i]<<8)+byteBuffer[2*i+1]) / 32768.0; // big endian
 
         dBlevel = 20*Math.log(Arrays.stream(sampleBuffer).sum()/sampleBuffer.length);
-        // ... TODO : dBlevel = update signal level in dB here ...
         return true;
     }
 
@@ -83,6 +92,14 @@ public class AudioSignal {
         int bytesWritten = audioOutput.write(byteBuffer, 0, byteBuffer.length);
 
         return bytesWritten == byteBuffer.length;
+    }
+
+    /** Compute the FFT of the audio signal. */
+    public Complex[] computeFFT() {
+        // Use the FFT class to compute the FFT of the sampleBuffer
+        return FFT.fft(Arrays.stream(sampleBuffer)
+                .mapToObj(value -> new Complex(value, 0))
+                .toArray(Complex[]::new));
     }
 
     // Getters & Setters
@@ -111,11 +128,4 @@ public class AudioSignal {
     public void setSample(int i, double value) {
         sampleBuffer[i] = value;
     }
-
-    // [x] your job: add getters and setters ...
-    // [x] double getSample(int i)
-    // [x] void setSample(int i, double value)
-    // [x] double getdBLevel()
-    // [x] int getFrameSize()
-    // [ ] Can be implemented much later: Complex[] computeFFT()
 }

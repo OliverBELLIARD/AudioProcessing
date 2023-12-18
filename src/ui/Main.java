@@ -1,5 +1,8 @@
 package ui;
 
+import audio.AudioIO;
+import audio.AudioSignal;
+import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -106,8 +109,46 @@ public class Main extends Application {
     }
 
     private Node createMainContent() {
-        Group g = new Group();
-        // Using g.getChildren().add(...) is easy to add graphic elements of type Node
-        return g;
+        // Create instances of your UI components
+        SignalView signalView = new SignalView();
+        Spectrogram spectrogram = new Spectrogram();
+        VuMeter vuMeter = new VuMeter();
+
+        // Create a layout to arrange the UI components
+        HBox mainContent = new HBox(signalView, spectrogram, vuMeter);
+
+        // Attach AnimationTimers to update the views periodically
+        AnimationTimer animationTimer = new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                if (AudioIO.getAudioInputLine() == null) {
+                    AudioIO.setAudioInputLine(AudioIO.obtainAudioInput(
+                            audioIOHandler.getAudioInputComboBox().getItems().getFirst(), 44100));
+                }
+
+                if (AudioIO.getAudioOutputLine() == null) {
+                    AudioIO.setAudioOutputLine(AudioIO.obtainAudioOutput(
+                            audioIOHandler.getAudioOutputComboBox().getItems().getFirst(), 44100));
+                }
+
+                // Get the current audio signal
+                AudioSignal audioSignal = audioIOHandler.getAudioSignal();
+
+                // Update the signal view
+                signalView.setAudioSignal(audioSignal);
+                signalView.updateData();
+
+                // Update the VuMeter
+                vuMeter.updateVuMeter(audioSignal.getdBlevel());
+
+                // Update the spectrogram
+                spectrogram.updateSpectrogram(audioSignal);
+            }
+        };
+
+        // animationTimer.start(); // Start the animation timer
+
+        return mainContent;
     }
+
 }
