@@ -19,13 +19,53 @@ public class AudioIO {
             + "\" description=\"" + e.getDescription() + " by " + e.getVendor() + "\""));
     }
 
-    /** @return a Mixer.Info whose name matches the given string.
+    /** @return a Mixer.Info whose name best matches the given string.
      * Example of use: getMixerInfo("Macbook default output")
      */
     public static Mixer.Info getMixerInfo(String mixerName) {
-        // see how the use of streams is much more compact than for() loops!
-        return Arrays.stream(AudioSystem.getMixerInfo())
-        .filter(e -> e.getName().equalsIgnoreCase(mixerName)).findFirst().get();
+        Mixer.Info[] mixerInfos = AudioSystem.getMixerInfo();
+
+        Mixer.Info bestMatch = null;
+        int bestMatchDistance = Integer.MAX_VALUE;
+
+        for (Mixer.Info info : mixerInfos) {
+            int distance = calculateLevenshteinDistance(mixerName.toLowerCase(), info.getName().toLowerCase());
+
+            if (distance < bestMatchDistance) {
+                bestMatchDistance = distance;
+                bestMatch = info;
+            }
+        }
+
+        return bestMatch;
+    }
+
+    /** Calculate Levenshtein distance between two strings. */
+    private static int calculateLevenshteinDistance(String s1, String s2) {
+        int[][] distance = new int[s1.length() + 1][s2.length() + 1];
+
+        for (int i = 0; i <= s1.length(); i++) {
+            for (int j = 0; j <= s2.length(); j++) {
+                if (i == 0) {
+                    distance[i][j] = j;
+                } else if (j == 0) {
+                    distance[i][j] = i;
+                } else {
+                    distance[i][j] = min(
+                            distance[i - 1][j - 1] + (s1.charAt(i - 1) == s2.charAt(j - 1) ? 0 : 1),
+                            distance[i][j - 1] + 1,
+                            distance[i - 1][j] + 1
+                    );
+                }
+            }
+        }
+
+        return distance[s1.length()][s2.length()];
+    }
+
+    /** Find the minimum value among three integers. */
+    private static int min(int a, int b, int c) {
+        return Math.min(Math.min(a, b), c);
     }
 
     /** Return a line that's appropriate for recording sound from a microphone.
@@ -36,16 +76,17 @@ public class AudioIO {
      */
     public static TargetDataLine obtainAudioInput(String mixerName, int sampleRate) {
         int channels = 2;
-        int sampleBytes = Short.SIZE / 8;
+        int sampleBytes = 2; // 16-bit audio, i.e., 2 bytes
         int frameBytes = sampleBytes * channels;
+
         AudioFormat format = new AudioFormat(
                 AudioFormat.Encoding.PCM_SIGNED,
                 sampleRate,
-                Short.SIZE,
+                16, // 16-bit audio
                 channels,
                 frameBytes,
                 sampleRate,
-                true);
+                false); // Use little-endian
         try {
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
             Mixer mixer = AudioSystem.getMixer(getMixerInfo(mixerName));
