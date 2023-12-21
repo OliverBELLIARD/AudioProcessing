@@ -16,6 +16,7 @@ import audio.AudioIOHandler;
 public class Main extends Application {
 
     private AudioIOHandler audioIOHandler;
+    private boolean audioProcessingOn = false;
 
     /* Terminal command to run in application configuration (Current Application>Edit Configuration):
     >>> cd src
@@ -96,6 +97,16 @@ public class Main extends Application {
      */
     private void startAudioProcessing() {
         audioIOHandler.startAudioProcessing();
+        audioProcessingOn = true;
+
+        AudioIO.setAudioInputLine(AudioIO.obtainAudioInput(
+                audioIOHandler.getAudioInputComboBox().getSelectionModel().getSelectedItem(),
+                44100));
+
+        AudioIO.setAudioOutputLine(AudioIO.obtainAudioOutput(
+                audioIOHandler.getAudioOutputComboBox().getSelectionModel().getSelectedItem(),
+                44100));
+
         System.out.println("Audio processing started.");
     }
 
@@ -105,6 +116,7 @@ public class Main extends Application {
     private void stopAudioProcessing() {
         // Stop audio processing using AudioIOHandler (add relevant method in AudioIOHandler)
         // audioIOHandler.stopAudioProcessing();
+        audioProcessingOn = false;
         System.out.println("Audio processing stopped.");
     }
 
@@ -117,36 +129,40 @@ public class Main extends Application {
         // Create a layout to arrange the UI components
         HBox mainContent = new HBox(signalView, spectrogram, vuMeter);
 
+        // We prevent the processing to start with null I/O
+        audioIOHandler.getAudioInputComboBox().getSelectionModel().selectFirst();
+        audioIOHandler.getAudioOutputComboBox().getSelectionModel().selectFirst();
+
+        // We initialize the global audio I/O Lines
+        AudioIO.setAudioInputLine(AudioIO.obtainAudioInput(
+                audioIOHandler.getAudioInputComboBox().getSelectionModel().getSelectedItem(),
+                44100));
+        AudioIO.setAudioOutputLine(AudioIO.obtainAudioOutput(
+                audioIOHandler.getAudioOutputComboBox().getSelectionModel().getSelectedItem(),
+                44100));
+
         // Attach AnimationTimers to update the views periodically
         AnimationTimer animationTimer = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                if (AudioIO.getAudioInputLine() == null) {
-                    AudioIO.setAudioInputLine(AudioIO.obtainAudioInput(
-                            audioIOHandler.getAudioInputComboBox().getItems().getFirst(), 44100));
+                if (audioProcessingOn) {
+                    // Get the current audio signal
+                    AudioSignal audioSignal = audioIOHandler.getAudioSignal();
+
+                    // Update the signal view
+                    signalView.setAudioSignal(audioSignal);
+                    signalView.updateData();
+
+                    // Update the VuMeter
+                    vuMeter.updateVuMeter(audioSignal.getdBlevel());
+
+                    // Update the spectrogram
+                    spectrogram.updateSpectrogram(audioSignal);
                 }
-
-                if (AudioIO.getAudioOutputLine() == null) {
-                    AudioIO.setAudioOutputLine(AudioIO.obtainAudioOutput(
-                            audioIOHandler.getAudioOutputComboBox().getItems().getFirst(), 44100));
-                }
-
-                // Get the current audio signal
-                AudioSignal audioSignal = audioIOHandler.getAudioSignal();
-
-                // Update the signal view
-                signalView.setAudioSignal(audioSignal);
-                signalView.updateData();
-
-                // Update the VuMeter
-                vuMeter.updateVuMeter(audioSignal.getdBlevel());
-
-                // Update the spectrogram
-                spectrogram.updateSpectrogram(audioSignal);
             }
         };
 
-        // animationTimer.start(); // Start the animation timer
+        animationTimer.start(); // Start the animation timer
 
         return mainContent;
     }

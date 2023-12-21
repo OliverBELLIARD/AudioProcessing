@@ -7,6 +7,7 @@ import java.util.List;
 
 /** A collection of static utilities related to the audio system. */
 public class AudioIO {
+    private static final int defaultFramSize = 1024;
     private static TargetDataLine audioInputLine;  // Add this line to store the audio input line
     private static SourceDataLine audioOutputLine; // Add this line to store the audio output line
 
@@ -45,7 +46,6 @@ public class AudioIO {
                 frameBytes,
                 sampleRate,
                 true);
-
         try {
             DataLine.Info info = new DataLine.Info(TargetDataLine.class, format);
             Mixer mixer = AudioSystem.getMixer(getMixerInfo(mixerName));
@@ -120,8 +120,16 @@ public class AudioIO {
 
     /** Returns the current audio signal. */
     public static AudioSignal getCurrentAudioSignal() {
-        AudioSignal audioSignal = new AudioSignal(1024);
-        audioSignal.recordFrom(audioInputLine); // Assuming audioInputLine is a class variable in AudioIO
+        AudioSignal audioSignal = new AudioSignal(defaultFramSize);
+
+        // Assuming you have an initialized TargetDataLine for recording
+        TargetDataLine audioInputLine = getAudioInputLine();
+
+        // Assuming you have initialized the AudioSignal instance
+        if (audioInputLine != null) {
+            audioSignal.recordFrom(audioInputLine);
+        }
+
         return audioSignal;
     }
 
@@ -146,6 +154,7 @@ public class AudioIO {
     /** Starts recording audio. */
     private static void startRecording(String inputDevice, int sampleRate) {
         audioInputLine = obtainAudioInput(inputDevice, sampleRate);
+
         if (audioInputLine != null) {
             audioInputLine.start();
             // Placeholder: Add logic to handle the recorded audio data
@@ -163,6 +172,7 @@ public class AudioIO {
     /** Starts playing back audio. */
     private static void startPlayback(String outputDevice, int sampleRate) {
         audioOutputLine = obtainAudioOutput(outputDevice, sampleRate);
+
         if (audioOutputLine != null) {
             audioOutputLine.start();
             // Placeholder: Add logic to provide audio data for playback
@@ -182,6 +192,11 @@ public class AudioIO {
     }
 
     public static void setAudioInputLine(TargetDataLine audioInputLine) {
+        // Check if initialization was successful
+        if (audioInputLine == null) {
+            System.out.println("Failed to initialize audio input line.");
+        }
+
         AudioIO.audioInputLine = audioInputLine;
     }
 
@@ -190,6 +205,11 @@ public class AudioIO {
     }
 
     public static void setAudioOutputLine(SourceDataLine audioOutputLine) {
+        // Check if initialization was successful
+        if (audioOutputLine == null) {
+            System.out.println("Failed to initialize audio output line.");
+        }
+
         AudioIO.audioOutputLine = audioOutputLine;
     }
 

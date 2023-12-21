@@ -3,7 +3,6 @@ package audio;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
 import javafx.scene.control.ComboBox;
-
 import java.util.List;
 
 public class AudioIOHandler {
@@ -69,6 +68,15 @@ public class AudioIOHandler {
     }
 
     public AudioSignal getAudioSignal() {
+        // We use the default mixer
+        String selectedInputDevice = audioInputComboBox.getValue();
+        String selectedOutputDevice = audioOutputComboBox.getValue();
+        int sampleRate = 44100; // You can adjust the sample rate as needed
+
+        // Initialize audio input and output lines
+        AudioIO.setAudioInputLine(AudioIO.obtainAudioInput(selectedInputDevice, sampleRate));
+        AudioIO.setAudioOutputLine(AudioIO.obtainAudioOutput(selectedOutputDevice, sampleRate));
+
         // Assuming AudioIO has a method to get the current audio signal
         return AudioIO.getCurrentAudioSignal();
     }

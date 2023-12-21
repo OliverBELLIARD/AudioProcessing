@@ -44,7 +44,6 @@ public class AudioSignal {
         }
     }
 
-
     /** Construct an AudioSignal that may contain up to "frameSize" samples.
      * @param frameSize the number of samples in one audio frame */
     public AudioSignal(int frameSize) {
